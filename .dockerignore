@@ -1,0 +1,5 @@
+venv/
+app/csv_storage/*.csv
+*.csv
+pg_db/
+csv_storage/

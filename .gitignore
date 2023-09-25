@@ -1,0 +1,5 @@
+app/csv_storage/*.csv
+venv/
+*.csv
+testing/
+__pycache__/

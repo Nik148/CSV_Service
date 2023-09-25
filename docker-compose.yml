@@ -1,0 +1,30 @@
+version: '3.3'
+services:
+    app:
+      build: ./
+      container_name: app
+      command: bash -c ". venv/bin/activate
+              && alembic upgrade head
+              && uvicorn main:app --host 0.0.0.0 --port 8000"
+      environment:
+        - DB_URL=postgresql+asyncpg://Nik:123@db:5432/csv_service
+      restart: always
+      depends_on:
+        - db
+      volumes:
+        - ./csv_storage:/app/csv_storage/
+      ports:
+        - 8000:8000
+
+    db:
+      user: root
+      image: postgres:15
+      restart: always
+      volumes:
+        - ./pg_db:/var/lib/postgresql/data/
+      environment:
+        - POSTGRES_USER=Nik
+        - POSTGRES_PASSWORD=123
+        - POSTGRES_DB=csv_service
+      ports:
+        - 5433:5432
