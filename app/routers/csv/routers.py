@@ -35,7 +35,7 @@ async def load_csv(file: UploadFile,
         csvUploader.save(file, file_model)
         session.add(file_model)
         await session.commit()
-        return {"filename": file_model.id, "type": file.content_type}
+        return {"message": "Success"}
     except IntegrityError:
         await csvUploader.delete()
         await session.rollback()
