@@ -43,8 +43,9 @@ class QueryCsvBuilder:
             filt = self.data.filters.get("compare")
             self.query = self.query[filters[filt["filter"]](self.df[filt["column_name"]], filt["value"])]
         else:
-            "Парсим фильтры в stack, в виде обратной польской нотации"
+            #Парсим фильтры в stack, в виде постфиксной формы
             stack = deque([])
+            #Запоминаем путь, по которому мы должны пройти
             stack_path = deque([])
             stack_path.append(self.data.filters)
             while len(stack_path) > 0:
@@ -57,19 +58,18 @@ class QueryCsvBuilder:
                     stack.appendleft(key)
                     stack_path.append(path[key][0])
                     stack_path.append(path[key][1])
-            print('LAS')
-            print(stack)
-            print(stack_path)
             
-            # Вычисляем обратную польскую нотацию
+            # Вычисляем постфиксную запись
             buffer = deque([])
             for ele in stack:
                 if ele not in ["and", "or"]:
                     buffer.append(ele)
 
                 else:
-                    print("la")
                     right = buffer.pop()
+                    # В начале у нас добавляются в buffer только словари и строки
+                    # Затем добавляются выражения query_filter
+                    # Поэтому нужна данная проверка:
                     if isinstance(right, dict):
                         right = filters[right["filter"]](self.df[right["column_name"]], right["value"])
                     left = buffer.pop()
