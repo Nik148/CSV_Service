@@ -7,7 +7,9 @@ services:
               && alembic upgrade head
               && uvicorn main:app --host 0.0.0.0 --port 8000"
       environment:
-        - DB_URL=postgresql+asyncpg://Nik:123@db:5432/csv_service
+        - DB_URL=postgresql+asyncpg://postgres:admin@db:5432/csv_service
+        - TEST_DB_URL=postgresql+asyncpg://postgres:admin@db:5432/test_csv_service
+        - TEST_DB_NAME=test_csv_service
       restart: always
       depends_on:
         - db
@@ -23,8 +25,8 @@ services:
       volumes:
         - ./pg_db:/var/lib/postgresql/data/
       environment:
-        - POSTGRES_USER=Nik
-        - POSTGRES_PASSWORD=123
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
         - POSTGRES_DB=csv_service
       ports:
         - 5433:5432

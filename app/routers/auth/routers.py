@@ -28,4 +28,4 @@ async def login(data: UserLoginSchema, session: AsyncSession = Depends(get_sessi
     user: User = user.scalar() 
     if user and password_context.verify(data.password, user.password):
         return signJWT(user.id)
-    return {"message": "Not login"}
+    return JSONResponse(status_code=400, content={"message": "Not login"}) 
